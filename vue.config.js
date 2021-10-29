@@ -1,5 +1,6 @@
 module.exports = {
-	devServer: {
-		proxy: 'http://nest-events-backend:3000'
-	}
+  devServer: {
+    proxy: 'http://localhost:3000',
+    port: 3001
+  }
 }

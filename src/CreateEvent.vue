@@ -65,7 +65,9 @@ export default {
     const {esLoading, esErrors, storeEvent} = useEventSaving(api);
     const createEvent = async () => {
       await storeEvent(eventData.value);
-      await router.back();
+      if (0 === esErrors.value.length) {
+        await router.back();
+      }
     }
 
     return {

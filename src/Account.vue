@@ -5,7 +5,7 @@
     <h1 class="text-2xl text-gray-700 mr-4">Events you attend</h1>
     <div class="border-b border-gray-300 mt-4 mb-4 mr-4"></div>
 
-    <div class="grid grid-cols-12" v-if="false === loading.attendedEvents && null !== attendedEvents">
+    <div class="grid grid-cols-12" v-if="false === loading.attendedEvents && null !== attendedEvents && attendedEvents.length > 0">
       <div class="col-span-4 mb-3" v-for="event in attendedEventsWithoutDesc" :key="event.id">
         <EventOnList :event="event" class="h-full">
           <div class="border-b mt-4 mb-4"></div>
@@ -38,7 +38,7 @@
     <div class="border-b border-gray-300 mt-4 mb-4 mr-4"></div>
 
     <div class="mb-3">
-      <div class="grid grid-cols-12" v-if="false === loading.organizedEvents && null !== organizedEvents">
+      <div class="grid grid-cols-12" v-if="false === loading.organizedEvents && null !== organizedEvents && organizedEvents.length > 0">
         <div class="col-span-4 mb-3" v-for="event in organizedEventsWithoutDesc" :key="event.id">
           <EventOnList :event="event">
             <div class="border-b mt-4 mb-4"></div>
@@ -54,7 +54,6 @@
             </div>
           </EventOnList>
         </div>
-
         <div class="col-span-12">
           <Pagination :page="1" route="account" page-parameter="organizedPage" :other-parameters="{attendedPage}"
                       next-label="Next" prev-label="Previous"></Pagination>
@@ -67,7 +66,7 @@
         </div>
       </div>
 
-      <RequestFailed v-if="false === loading.organizedEvents && null === organizedEvents"></RequestFailed>
+      <RequestFailed v-if="false === loading.organizedEvents && (null === organizedEvents || organizedEvents.length === 0)"></RequestFailed>
     </div>
   </div>
 </template>
@@ -116,7 +115,7 @@ export default {
       const t = setTimeout(() => loading.value.organizedEvents = true, null === organizedEvents ? 1 : 1000);
       try {
         if (user.value.userId) {
-          organizedEvents.value = (await api.get(`/user-events/${user.value.userId}?page=${page}`)).data.data;
+          organizedEvents.value = (await api.get(`/events-organized-by-user/${user.value.userId}?page=${page}`)).data.data;
         }
       } catch (e) {
         organizedEvents.value = null;
